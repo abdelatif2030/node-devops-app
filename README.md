@@ -1,178 +1,215 @@
-# 🚀 node-devops-app
+# 🚀 Node.js DevOps CI/CD Project (Docker + Kubernetes + GitHub Actions)
 
-A production-style **Node.js REST API** demonstrating a complete DevOps workflow using **Docker, Kubernetes (Minikube), and CI/CD with GitHub Actions**.
+## 📌 Project Overview
 
----
+This project demonstrates a complete DevOps workflow for a Node.js REST API using modern tools including Docker, Kubernetes (Minikube), and GitHub Actions CI/CD pipeline.
 
-## 📌 Overview
-
-`node-devops-app` is a simple yet scalable REST API built with Node.js and Express.  
-It is designed to simulate a real-world DevOps project with full automation from development to deployment.
-
-The project includes:
-- REST API (Users CRUD)
-- Containerization with Docker
-- Kubernetes deployment (Minikube-ready)
-- CI/CD pipeline using GitHub Actions
-- Production-ready project structure
+The goal is to simulate a real-world production deployment pipeline from code to containerization to orchestration and automation.
 
 ---
 
-## 🧱 Tech Stack
+## 🧱 Architecture
 
-- Node.js
-- Express.js
-- Docker
-- Kubernetes (Minikube)
-- GitHub Actions (CI/CD)
-- Helm-ready structure (optional upgrade)
+```
+Developer Code
+      ↓
+GitHub Repository
+      ↓
+GitHub Actions (CI/CD)
+      ↓
+Docker Image Build
+      ↓
+DockerHub Registry
+      ↓
+Kubernetes (Minikube)
+      ↓
+Node.js API Service
+      ↓
+Browser / API Clients
+```
 
 ---
 
-## 📁 Project Structure
+## ⚙️ Tech Stack
+
+* Node.js (Express.js)
+* Docker
+* Kubernetes (Minikube)
+* GitHub Actions (CI/CD)
+* DockerHub
+* Linux (WSL2)
+
+---
+
+## 🚀 Features
+
+* REST API built with Express.js
+* Health check endpoint (`/health`)
+* Containerized using Docker
+* Deployed on Kubernetes cluster
+* Multi-replica deployment (scaling)
+* CI/CD pipeline using GitHub Actions
+* Automated Docker image build & push
+
+---
+
+## 📂 Project Structure
+
+```
 node-devops-app/
-│
-├── src/
-│ ├── routes/
-│ ├── controllers/
-│ ├── services/
-│ ├── middlewares/
-│ ├── config/
-│ └── app.js
-│
-├── tests/
-├── server.js
-├── Dockerfile
-├── deployment.yaml
-├── service.yaml
-├── package.json
-└── .github/workflows/ci-cd.yml
-
+│── src/
+│   └── app.js
+│── server.js
+│── routes/
+│── tests/
+│── Dockerfile
+│── deployment.yaml
+│── service.yaml
+│── package.json
+│── .github/workflows/
+│   └── ci-cd.yml
+```
 
 ---
 
-## ⚙️ Features
+## 🐳 Docker Setup
 
-### 🔹 Backend API
-- Create user
-- Get all users
-- Delete user
-- Health check endpoint
+### Build Image
 
-### 🔹 DevOps Features
-- Dockerized application
-- Kubernetes deployment (2 replicas by default)
-- CI/CD pipeline automation
-- Environment-based configuration
-- Scalable architecture
+```
+docker build -t node-devops-app .
+```
+
+### Run Container
+
+```
+docker run -p 3000:3000 node-devops-app
+```
 
 ---
 
-## 🚀 Getting Started
+## ☸️ Kubernetes Deployment (Minikube)
 
-### 1️⃣ Clone the repository
+### Apply Deployment
 
-```bash
-git clone https://github.com/your-username/node-devops-app.git
-cd node-devops-app
-2️⃣ Install dependencies
-npm install
-3️⃣ Run locally
-npm start
+```
+kubectl apply -f deployment.yaml
+```
 
-App will run on:
+### Apply Service
 
-http://localhost:3000
-📡 API Endpoints
-Health Check
+```
+kubectl apply -f service.yaml
+```
+
+### Check Pods
+
+```
+kubectl get pods
+```
+
+### Expose Service
+
+```
+minikube service node-api-service
+```
+
+---
+
+## 🔁 CI/CD Pipeline (GitHub Actions)
+
+Pipeline automatically:
+
+1. Checks out code
+2. Builds Docker image
+3. Logs into DockerHub
+4. Pushes image to registry
+
+Trigger:
+
+```
+on: push to main branch
+```
+
+---
+
+## 🌐 API Endpoints
+
+### Health Check
+
+```
 GET /health
+```
 
 Response:
 
+```json
 {
   "status": "UP",
-  "time": "2026-04-28T00:00:00.000Z"
+  "time": "2026-04-28T..."
 }
-Get Users
-GET /api/users
-Create User
-POST /api/users
+```
 
-Body:
+---
 
-{
-  "name": "John Doe"
-}
-Delete User
-DELETE /api/users/:id
-🐳 Docker Setup
-Build image
-docker build -t node-devops-app .
-Run container
-docker run -p 3000:3000 node-devops-app
-☸️ Kubernetes Deployment (Minikube)
-Start Minikube
-minikube start
-Use Minikube Docker environment
-eval $(minikube docker-env)
-Build image inside Minikube
-docker build -t node-devops-app .
-Deploy application
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-Access service
-minikube service node-api-service
-🔁 CI/CD Pipeline (GitHub Actions)
+## 📊 Key DevOps Concepts Demonstrated
 
-On every push to main branch:
+* Containerization
+* Microservices deployment
+* Kubernetes orchestration
+* CI/CD automation
+* Immutable infrastructure
+* Rolling updates
 
-Pipeline steps:
-Checkout code
-Install dependencies
-Build Docker image
-(Optional) Push to Docker Hub
-📄 Example Workflow
-name: CI/CD Pipeline
+---
 
-on:
-  push:
-    branches: [ "main" ]
+## 🧪 How to Run Locally
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+### 1. Install dependencies
 
-    steps:
-      - uses: actions/checkout@v3
+```
+npm install
+```
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+### 2. Run app
 
-      - run: npm install
+```
+node server.js
+```
 
-      - name: Build Docker Image
-        run: docker build -t node-devops-app .
-📦 Kubernetes Files
-Deployment
-2 replicas
-Node.js container
-Port 3000 exposed
-Service
-NodePort service
-External access via Minikube
-🎯 Purpose of This Project
+### 3. Test API
 
-This project was built to demonstrate:
+```
+curl http://localhost:3000/health
+```
 
-Backend development skills (Node.js)
-Containerization (Docker)
-Kubernetes orchestration
-CI/CD automation
-DevOps best practices
+---
 
+## ☁️ Future Improvements
 
-👨‍💻 Author
-DevOps Engineer Abdellatif Mohamed
+* AWS ECS / EKS deployment
+* Terraform Infrastructure as Code
+* Prometheus + Grafana monitoring
+* Helm charts
+* Ingress controller setup
 
+---
+
+## 👨‍💻 Author
+
+DevOps Engineer Portfolio Project
+
+Focus: CI/CD, Kubernetes, Cloud Infrastructure
+
+---
+
+## 📌 Status
+
+✔ CI/CD Working
+✔ Dockerized
+✔ Kubernetes Deployed
+✔ API Functional
+
+---
+
+🔥 This project represents a real-world DevOps pipeline from code to production-ready deployment environment.
